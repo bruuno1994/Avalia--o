@@ -5,13 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sistema de Cadastros - Fatec Franca</title>
-    <!--Link para conexão com o Bootstrap-->
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-    <!--Link para conexão com o framework Vue-->
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-  <!--Código em CSS interno responsável pela estilização-->
   <style>
     .modal-mask {
       position: fixed;
@@ -33,7 +29,7 @@
 </head>
 
 <body>
-  <div class="container" id="crudApp">
+  <div course="container" id="crudApp">
     <br />
     <h3 align="center">
       <img src="https://site.fatecfranca.edu.br/images/logo-fatec-franca-15-anos.png" width=50% height=50%
@@ -66,7 +62,7 @@
             <tr v-for="row in allData">
               <td>{{ row.first_name }}</td>
               <td>{{ row.address }}</td>
-              <td>{{ row.class }}</td>
+              <td>{{ row.course }}</td>
               <td>{{ row.salary }}</td>
               <td>
                 <button type="button" name="edit" class="btn btn-primary btn-xs edit" @click="fetchData(row.id)">
@@ -106,7 +102,7 @@
                   </div>
                   <div class="form-group">
                     <label>Curso</label>
-                    <input type="text" class="form-control" v-model="class" />
+                    <input type="text" class="form-control" v-model="course" />
                   </div>
                   <div class="form-group">
                     <label>Salário</label>
@@ -151,41 +147,43 @@
       openModel: function () {
         application.first_name = "";
         application.address = "";
-        application.class = "";
+        application.course = "";
         application.salary = "";
         application.actionButton = "Insert";
         application.dynamicTitle = "Adicionar Professor";
         application.myModel = true;
       },
       submitData: function () {
-        if (application.first_name != "" && application.address != "" && application.class != "" && application.salary != "") {
-          if (application.actionButton == "Insert") {
+        // Função para enviar os dados de nome e sobrenome para cadastro.php
+        if (application.first_name != "" && application.address != "" && application.course != "" && application.salary != "") { 
+          // Criação de novo usuário
+          if (application.actionButton == "Insert") { 
             axios
               .post("cadastroProfessores.php", {
                 action: "insert",
-                firstName: application.first_name,
+                first_name: application.first_name,
                 address: application.address,
-                class: application.class,
+                course: application.course,
                 salary: application.salary,
-
               })
               .then(function (response) {
                 application.myModel = false;
                 application.fetchAllData();
                 application.first_name = "";
                 application.address = "";
-                application.class = "";
+                application.course = "";
                 application.salary = "";
-                alert(response.data.message);
+                alert(response.data.message); // Exibe um alerta para indicar o status da requisição
               });
           }
+          // Atualização de usuário já existente
           if (application.actionButton == "Update") {
             axios
               .post("cadastroProfessores.php", {
                 action: "update",
-                firstName: application.first_name,
+                first_name: application.first_name,
                 address: application.address,
-                class: application.class,
+                course: application.course,
                 salary: application.salary,
                 hiddenId: application.hiddenId,
               })
@@ -194,7 +192,7 @@
                 application.fetchAllData();
                 application.first_name = "";
                 application.address = "";
-                application.class = "";
+                application.course = "";
                 application.salary = "";
                 application.hiddenId = "";
                 alert(response.data.message);
@@ -213,7 +211,7 @@
           .then(function (response) {
             application.first_name = response.data.first_name;
             application.address = response.data.address;
-            application.class = response.data.class;
+            application.course = response.data.course;
             application.salary = response.data.salary;
             application.hiddenId = response.data.id;
             application.myModel = true;
@@ -221,6 +219,7 @@
             application.dynamicTitle = "Edit Data";
           });
       },
+      // Cria a função para deletar o usuário 
       deleteData: function (id) {
         if (confirm("Você tem certeza que deseja deletar esse professor?")) {
           axios

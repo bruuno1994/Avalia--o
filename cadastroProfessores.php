@@ -24,14 +24,14 @@ if ($received_data->action == 'insert') {
     $data = array(
         ':first_name' => $received_data->first_name,
         ':address' => $received_data->address,
-        ':class' => $received_data->class,
+        ':course' => $received_data->course,
         ':salary' => $received_data->salary
     );
     // Código em SQL responsável por inserir um novo professor no Banco de Dados
     $query = "
  INSERT INTO fatec_professores 
- (first_name, address, class, salary) 
- VALUES (:first_name, :address, :class, :salary)
+ (first_name, address, course, salary) 
+ VALUES (:first_name, :address, :course, :salary)
  ";
 
     $statement = $connect->prepare($query);
@@ -60,7 +60,7 @@ if ($received_data->action == 'fetchSingle') {
         $data['id'] = $row['id'];
         $data['first_name'] = $row['first_name'];
         $data['address'] = $row['address'];
-        $data['class'] = $row['class'];
+        $data['course'] = $row['course'];
         $data['salary'] = $row['salary'];
     }
 
@@ -70,7 +70,7 @@ if ($received_data->action == 'update') {
     $data = array(
         ':first_name' => $received_data->first_name,
         ':address' => $received_data->address,
-        ':class' => $received_data->class,
+        ':course' => $received_data->course,
         ':salary' => $received_data->salary,
         ':id' => $received_data->hiddenId
     );
@@ -79,7 +79,7 @@ if ($received_data->action == 'update') {
  UPDATE fatec_professores
  SET first_name = :first_name, 
  address = :address,
- class = :class,
+ course = :course,
  salary = :salary
  WHERE id = :id
  ";
